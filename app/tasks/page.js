@@ -8,33 +8,56 @@ export default function Tasks() {
   const [deadline, setDeadline] = useState("")
   const [name, setName] = useState("")
 
+  // Load username dari localStorage + refresh data
   useEffect(() => {
-    const saved = localStorage.getItem("username")
-    if (saved) setName(saved)
-    refresh()
+    const saved = localStorage.getItem("username") || "guest"
+    setName(saved)
+    refresh(saved)
   }, [])
 
-  async function refresh() {
-    const res = await fetch("/api/tasks")
-    setTasks(await res.json())
+  // Refresh tasks sesuai username
+  async function refresh(username) {
+    const res = await fetch(`/api/tasks?username=${username}`)
+    const data = await res.json()
+    setTasks(data)
   }
 
+  // Tambah task
   async function addTask(e) {
     e.preventDefault()
-    await fetch("/api/tasks", { method: "POST", body: JSON.stringify({ title, category, deadline }) })
+    const username = localStorage.getItem("username") || "guest"
+
+    await fetch("/api/tasks", { 
+      method: "POST", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ title, category, deadline, username }) 
+    })
+
     setTitle("")
     setDeadline("")
-    refresh()
+    refresh(username)
   }
 
+  // Toggle done
   async function toggle(id, done) {
-    await fetch("/api/tasks", { method: "PUT", body: JSON.stringify({ id, done: !done }) })
-    refresh()
+    await fetch("/api/tasks", { 
+      method: "PUT", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id, done: !done }) 
+    })
+    const username = localStorage.getItem("username") || "guest"
+    refresh(username)
   }
 
+  // Hapus task
   async function remove(id) {
-    await fetch("/api/tasks", { method: "DELETE", body: JSON.stringify({ id }) })
-    refresh()
+    await fetch("/api/tasks", { 
+      method: "DELETE", 
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ id }) 
+    })
+    const username = localStorage.getItem("username") || "guest"
+    refresh(username)
   }
 
   return (
