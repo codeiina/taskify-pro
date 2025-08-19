@@ -1,3 +1,4 @@
+import Link from "next/link"
 import "./globals.css"
 
 export const metadata = {
@@ -14,9 +15,9 @@ export default function RootLayout({ children }) {
           <div className="max-w-6xl mx-auto flex justify-between items-center px-6 py-4">
             <h1 className="text-white font-extrabold text-2xl">🚀 Taskify Pro</h1>
             <ul className="flex gap-6 text-white font-medium">
-              <li><a href="/" className="hover:text-yellow-300">🏠 Home</a></li>
-              <li><a href="/tasks" className="hover:text-yellow-300">✅ Tasks</a></li>
-              <li><a href="/about" className="hover:text-yellow-300">ℹ️ About</a></li>
+              <li><Link href="/" className="hover:text-yellow-300">🏠 Home</Link></li>
+              <li><Link href="/tasks" className="hover:text-yellow-300">✅ Tasks</Link></li>
+              <li><Link href="/about" className="hover:text-yellow-300">ℹ️ About</Link></li>
             </ul>
           </div>
         </nav>
